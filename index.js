@@ -18,7 +18,7 @@ const puppeteer = require('puppeteer');
             '--start-maximized'
         ],
         defaultViewport: null,
-        executablePath: '/usr/bin/google-chrome-stable'
+        executablePath: '/usr/bin/google-chrome'
     });
 
     const page = await browser.newPage();
