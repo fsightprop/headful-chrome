@@ -44,10 +44,16 @@ print_status "Starting Headful Chrome Remote Puppeteer installation..."
 if [ ! -f "Dockerfile" ] && [ ! -f "docker-compose.yml" ]; then
     print_warning "No Docker files found in current directory."
     print_status "This script will create all necessary files in: $(pwd)"
-    read -p "Continue? (y/n) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
+    
+    # Check if running interactively
+    if [ -t 0 ]; then
+        read -p "Continue? (y/n) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            exit 1
+        fi
+    else
+        print_status "Running in non-interactive mode, proceeding..."
     fi
 fi
 
