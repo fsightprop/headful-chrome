@@ -37,14 +37,14 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-# Create app directory first
-RUN mkdir -p /app
+# Set up app directory
 WORKDIR /app
 
-# Install Puppeteer with proper cache handling
-RUN npm init -y && \
-    npm cache clean --force && \
-    npm install puppeteer --save
+# Copy package.json if it exists (for caching)
+COPY package.json* ./
+
+# Install dependencies
+RUN npm install || (npm init -y && npm install puppeteer)
 
 # Copy configuration files
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
