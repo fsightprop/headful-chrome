@@ -1,0 +1,39 @@
+{
+  "name": "Headful Chrome - Basic Connection",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://headful-chrome-n8n:9222/json/version",
+        "options": {}
+      },
+      "id": "1",
+      "name": "Get Browser Info",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const browserInfo = $input.first().json;\nconst wsEndpoint = browserInfo.webSocketDebuggerUrl;\n\n// Use this wsEndpoint in your Puppeteer node\nreturn [{\n  json: {\n    wsEndpoint,\n    browserInfo,\n    connectionExample: `puppeteer.connect({ browserWSEndpoint: '${wsEndpoint}' })`\n  }\n}];"
+      },
+      "id": "2",
+      "name": "Extract WebSocket URL",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {
+    "Get Browser Info": {
+      "main": [
+        [
+          {
+            "node": "Extract WebSocket URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

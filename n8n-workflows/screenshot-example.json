@@ -1,0 +1,39 @@
+{
+  "name": "Headful Chrome - Screenshot Example",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://headful-chrome-n8n:9222/json/version",
+        "options": {}
+      },
+      "id": "1",
+      "name": "Get Browser Info",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// This example shows how to take a screenshot using the remote browser\n// You'll need to install n8n-nodes-puppeteer community node\n\nconst browserInfo = $input.first().json;\nconst wsEndpoint = browserInfo.webSocketDebuggerUrl;\n\n// Example code for Puppeteer node:\n/*\nconst puppeteer = require('puppeteer');\n\nconst browser = await puppeteer.connect({\n  browserWSEndpoint: wsEndpoint\n});\n\nconst page = await browser.newPage();\nawait page.goto('https://example.com');\nconst screenshot = await page.screenshot({ fullPage: true });\nawait page.close(); // Don't close browser!\n\nreturn [{ binary: { data: screenshot } }];\n*/\n\nreturn [{\n  json: {\n    wsEndpoint,\n    instructions: 'Use this endpoint in your Puppeteer node',\n    note: 'Remember to use page.close() not browser.close()'\n  }\n}];"
+      },
+      "id": "2",
+      "name": "Prepare Screenshot Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {
+    "Get Browser Info": {
+      "main": [
+        [
+          {
+            "node": "Prepare Screenshot Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

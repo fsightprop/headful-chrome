@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  headful-chrome:
+    build: .
+    container_name: headful-chrome-n8n
+    restart: unless-stopped
+    ports:
+      - "5900:5900"     # VNC
+      - "9223:9223"     # Nginx proxy for Chrome debugging
+      - "9222:9222"     # Direct Chrome debugging
+    environment:
+      - NODE_ENV=production
+      - DISPLAY=:99
+    volumes:
+      - ./data:/data
+    networks:
+      - n8n-network
+
+networks:
+  n8n-network:
+    external: true
+    name: n8n-network
